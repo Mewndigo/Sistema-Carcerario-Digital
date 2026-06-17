@@ -20,18 +20,18 @@ public class OcorrenciaService {
 
     public List<Ocorrencia> findAll() { return repo.findAll(); }
 
-    public Ocorrencia findById(UUID id) { return repo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Ocorrencia not found")); }
+    public Ocorrencia findById(UUID id) { return repo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Ocorrência não encontrada")); }
 
     public Ocorrencia create(Ocorrencia o) { return repo.save(o); }
 
     public Ocorrencia update(UUID id, Ocorrencia o) {
-        if (!repo.existsById(id)) throw new ResourceNotFoundException("Ocorrencia not found");
+        if (!repo.existsById(id)) throw new ResourceNotFoundException("Ocorrência não encontrada");
         o.setId(id);
         return repo.save(o);
     }
 
     public void delete(UUID id) {
-        if (!repo.existsById(id)) throw new ResourceNotFoundException("Ocorrencia not found");
+        if (!repo.existsById(id)) throw new ResourceNotFoundException("Ocorrência não encontrada");
         repo.deleteById(id);
     }
 }

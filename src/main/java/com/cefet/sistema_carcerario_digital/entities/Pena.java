@@ -16,8 +16,8 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "tb_pena")
 public class Pena {
-    @Id
-    @GeneratedValue
+
+    @Id @GeneratedValue
     @Column(columnDefinition = "BINARY(16)", updatable = false, nullable = false)
     private UUID id;
 
@@ -37,16 +37,16 @@ public class Pena {
 
     @ManyToOne
     @JoinColumn(name = "pessoa_id", nullable = false)
-    private Pessoa pessoa;
+    private Pessoa pessoa;//o detento
 
     public Pena() {
     }
 
     public Pena(UUID id, LocalDateTime dataSaida, StatusDetento situacao, LocalDateTime dataEntrada, Pessoa pessoa) {
         this.id = id;
+        this.dataEntrada = dataEntrada;
         this.dataSaida = dataSaida;
         this.situacao = situacao;
-        this.dataEntrada = dataEntrada;
         this.pessoa = pessoa;
     }
 
@@ -56,22 +56,6 @@ public class Pena {
 
     public void setId(UUID id) {
         this.id = id;
-    }
-
-    public LocalDateTime getdataSaida() {
-        return dataSaida;
-    }
-
-    public void setdataSaida(LocalDateTime dataSaida) {
-        this.dataSaida = dataSaida;
-    }
-
-    public StatusDetento getsituacao() {
-        return situacao;
-    }
-
-    public void setsituacao(StatusDetento situacao) {
-        this.situacao = situacao;
     }
 
     public LocalDateTime getDataEntrada() {

@@ -20,18 +20,18 @@ public class TipoAtividadeService {
 
     public List<TipoAtividade> findAll() { return repo.findAll(); }
 
-    public TipoAtividade findById(UUID id) { return repo.findById(id).orElseThrow(() -> new ResourceNotFoundException("TipoAtividade not found")); }
+    public TipoAtividade findById(UUID id) { return repo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Tipo de Atividade não encontrada")); }
 
     public TipoAtividade create(TipoAtividade t) { return repo.save(t); }
 
     public TipoAtividade update(UUID id, TipoAtividade t) {
-        if (!repo.existsById(id)) throw new ResourceNotFoundException("TipoAtividade not found");
+        if (!repo.existsById(id)) throw new ResourceNotFoundException("Tipo de Atividade não encontrada");
         t.setId(id);
         return repo.save(t);
     }
 
     public void delete(UUID id) {
-        if (!repo.existsById(id)) throw new ResourceNotFoundException("TipoAtividade not found");
+        if (!repo.existsById(id)) throw new ResourceNotFoundException("Tipo de Atividade não encontrada");
         repo.deleteById(id);
     }
 }

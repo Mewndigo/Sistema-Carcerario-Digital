@@ -43,13 +43,13 @@ public class RegistroAtividade {
     }
 
     public RegistroAtividade(UUID id, LocalDateTime dataRegistro, String descricao, TipoAtividade tipo, Pena pena,
-            Pessoa usuario) {
+            Pessoa pessoa) {
         this.id = id;
         this.dataRegistro = dataRegistro;
         this.descricao = descricao;
         this.tipo = tipo;
         this.pena = pena;
-        this.pessoa = usuario;
+        this.pessoa = pessoa;
     }
 
     public UUID getId() {

@@ -22,7 +22,7 @@ public class TipoAtividade {
     public TipoAtividade() {
     }
 
-    public TipoAtividade(UUID id, String nome, String observacoes) {
+    public TipoAtividade(UUID id, String nome) {
         this.id = id;
         this.nome = nome;
     }

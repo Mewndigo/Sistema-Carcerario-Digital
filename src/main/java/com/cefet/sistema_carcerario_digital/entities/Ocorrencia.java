@@ -35,9 +35,10 @@ public class Ocorrencia {
     @JoinColumn(name = "tipo_ocorrencia_id", nullable = false)
     private TipoOcorrencia tipo;
 
-    @ManyToOne
-    @JoinColumn(name = "pessoa_id", nullable = false)
-    private Pessoa pessoa;
+    // deixamos o agente como atributo ou só o detento?
+    // @ManyToOne
+    // @JoinColumn(name = "pessoa_id", nullable = false)
+    // private Pessoa pessoa; 
 
     @ManyToOne
     @JoinColumn(name = "pena_id", nullable = false)
@@ -50,8 +51,8 @@ public class Ocorrencia {
         this.dataRegistro = dataRegistro;
         this.descricao = descricao;
         this.tipo = tipo;
-        this.pessoa = pessoa;
         this.pena = pena;
+        // this.pessoa = pessoa;
     }
 
     public Ocorrencia(UUID id, LocalDateTime dataRegistro, String descricao, TipoOcorrencia tipo, Pessoa usuario) {
@@ -59,7 +60,7 @@ public class Ocorrencia {
         this.dataRegistro = dataRegistro;
         this.descricao = descricao;
         this.tipo = tipo;
-        this.pessoa = usuario;
+        // this.pessoa = usuario;
     }
 
     public UUID getId() {
@@ -94,14 +95,6 @@ public class Ocorrencia {
         this.tipo = tipo;
     }
 
-    public Pessoa getPessoa() {
-        return pessoa;
-    }
-
-    public void setPessoa(Pessoa pessoa) {
-        this.pessoa = pessoa;
-    }
-
     public Pena getPena() {
         return pena;
     }
@@ -109,4 +102,12 @@ public class Ocorrencia {
     public void setPena(Pena pena) {
         this.pena = pena;
     }
+    
+    // public Pessoa getPessoa() {
+    //     return pessoa;
+    // }
+
+    // public void setPessoa(Pessoa pessoa) {
+    //     this.pessoa = pessoa;
+    // }
 }
