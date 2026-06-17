@@ -15,8 +15,8 @@ public class OcorrenciaResponseDTO {
     public OcorrenciaResponseDTO(Ocorrencia entity) {
         this.dataRegistro = entity.getDataRegistro();
         this.descricao = entity.getDescricao();
-        this.penaId = entity.getPena().getId();
-        this.tipoId = entity.getTipo().getId();
+        this.penaId = entity.getPenaId();
+        this.tipoId = entity.getTipoId();
     }
 
     public LocalDateTime getDataRegistro() {

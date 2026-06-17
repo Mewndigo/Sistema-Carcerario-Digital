@@ -17,21 +17,21 @@ import com.cefet.sistema_carcerario_digital.repositories.PenaRepository;
 @Service
 public class PenaService {
 
-    private final PenaRepository penaRepository;
+    private final PenaRepository repo;
 
     PenaService(PenaRepository penaRepository) {
-        this.penaRepository = penaRepository;
+        this.repo = penaRepository;
     }
 
     @Transactional(readOnly = true)
     public List<PenaResponseDTO> listar() {
-        List<Pena> lista = penaRepository.findAll();
+        List<Pena> lista = repo.findAll();
         return lista.stream().map(PenaResponseDTO::new).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     public PenaResponseDTO buscarPorId(UUID id) {
-        Pena entity = penaRepository.findById(id)
+        Pena entity = repo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Pena não encontrado. Id: " + id));
 
         return new PenaResponseDTO(entity);
@@ -46,11 +46,11 @@ public class PenaService {
         // Adicionamos mais um elemento em Pena para diferenciar as penas
         // ou deixamos sem essa conferencia?
 
-        // deixei isso mas estaria errado dentro desse contexto: 
+        // deixei isso mas estaria errado dentro desse contexto:
         // ----
-        if (penaRepository.existsByDataEntrada(dto.getDataEntrada())
+        if (repo.existsByDataEntrada(dto.getDataEntrada())
 
-                && penaRepository.existsByPessoa(dto.getPessoaId())) {
+                && repo.existsByPessoa(dto.getPessoaId())) {
             throw new DatabaseException("Pena já cadastrado.");
         }
         // ----
@@ -58,7 +58,7 @@ public class PenaService {
         Pena entity = new Pena();
         copiarDtoParaEntidade(dto, entity);
 
-        entity = penaRepository.save(entity);
+        entity = repo.save(entity);
 
         return new PenaResponseDTO(entity);
     }
@@ -67,30 +67,30 @@ public class PenaService {
 
     @Transactional
     public PenaResponseDTO alterar(UUID id, PenaRequestDTO dto) {
-        Pena entity = penaRepository.findById(id)
+        Pena entity = repo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Pena não encontrado. Id: " + id));
 
         copiarDtoParaEntidade(dto, entity);
-        entity = penaRepository.save(entity);
+        entity = repo.save(entity);
+
+        // se tiver alguma regra que estamos esquecendo tem que colocar aqui depois !
 
         return new PenaResponseDTO(entity);
     }
 
     @Transactional
     public void excluir(UUID id) {
-        if (!penaRepository.existsById(id)) {
+        if (!repo.existsById(id)) {
             throw new ResourceNotFoundException("Pena não encontrado. Id: " + id);
         }
-        penaRepository.deleteById(id);
+        repo.deleteById(id);
     }
 
-// > FAZER UM COMMIT DEPOIS QUE TERMINAR AQUI, com o nome "commit de PessoaService"
-
     private void copiarDtoParaEntidade(PenaRequestDTO dto, Pena entity) {
-        entity.setDataEntrada(null);
-        entity.setDataSaida(null);
-        entity.setDescricao(null);
-        entity.setPessoa(null);
-        entity.setSituacao(null);
+        entity.setDataEntrada(dto.getDataEntrada());
+        entity.setDataSaida(dto.getDataSaida());
+        entity.setDescricao(dto.getDescricao());
+        entity.setSituacao(dto.getSituacao());
+        entity.setPessoaId(dto.getPessoaId());
     }
 }

@@ -17,21 +17,21 @@ import com.cefet.sistema_carcerario_digital.repositories.PessoaRepository;
 @Service
 public class PessoaService {
 
-    private final PessoaRepository pessoaRepository;
+    private final PessoaRepository repo;
 
     PessoaService(PessoaRepository pessoaRepository) {
-        this.pessoaRepository = pessoaRepository;
+        this.repo = pessoaRepository;
     }
 
     @Transactional(readOnly = true)
     public List<PessoaResponseDTO> listar() {
-        List<Pessoa> lista = pessoaRepository.findAll();
+        List<Pessoa> lista = repo.findAll();
         return lista.stream().map(PessoaResponseDTO::new).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     public PessoaResponseDTO buscarPorId(UUID id) {
-        Pessoa entity = pessoaRepository.findById(id)
+        Pessoa entity = repo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Pessoa não encontrado. Id: " + id));
 
         return new PessoaResponseDTO(entity);
@@ -41,41 +41,41 @@ public class PessoaService {
     public PessoaResponseDTO inserir(PessoaRequestDTO dto) {
         String cpf = normalizarCpf(dto.getCpf());
 
-        if (pessoaRepository.existsByCpf(cpf)) {
+        if (repo.existsByCpf(cpf)) {
             throw new DatabaseException("CPF já cadastrado.");
         }
 
         Pessoa entity = new Pessoa();
         copiarDtoParaEntidade(dto, entity, cpf);
 
-        entity = pessoaRepository.save(entity);
+        entity = repo.save(entity);
 
         return new PessoaResponseDTO(entity);
     }
 
     @Transactional
     public PessoaResponseDTO alterar(UUID id, PessoaRequestDTO dto) {
-        Pessoa entity = pessoaRepository.findById(id)
+        Pessoa entity = repo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Pessoa não encontrado. Id: " + id));
 
         String cpf = normalizarCpf(dto.getCpf());
 
-        if (pessoaRepository.existsByCpfAndIdNot(cpf, id)) {
+        if (repo.existsByCpfAndIdNot(cpf, id)) {
             throw new DatabaseException("CPF já cadastrado.");
         }
 
         copiarDtoParaEntidade(dto, entity, cpf);
-        entity = pessoaRepository.save(entity);
+        entity = repo.save(entity);
 
         return new PessoaResponseDTO(entity);
     }
 
     @Transactional
     public void excluir(UUID id) {
-        if (!pessoaRepository.existsById(id)) {
+        if (!repo.existsById(id)) {
             throw new ResourceNotFoundException("Pessoa não encontrado. Id: " + id);
         }
-        pessoaRepository.deleteById(id);
+        repo.deleteById(id);
     }
 
     private void copiarDtoParaEntidade(PessoaRequestDTO dto, Pessoa entity, String cpf) {

@@ -23,44 +23,40 @@ public class Ocorrencia {
     private LocalDateTime dataRegistro;
 
     // Para fazer a separação dos campos de data e hora no front:
-    
+
     // LocalDate date = LocalDate.of(year, month, dayOfMonth);
     // LocalTime time = LocalTime.of(hour, minute);
-    //  return new LocalDateTime(date, time);
+    // return new LocalDateTime(date, time);
 
     @Column(nullable = false, length = 200)
     private String descricao;
 
     @ManyToOne
     @JoinColumn(name = "tipo_ocorrencia_id", nullable = false)
-    private TipoOcorrencia tipo;
+    private UUID tipo_id;
 
     // deixamos o agente como atributo ou só o detento?
     // @ManyToOne
     // @JoinColumn(name = "pessoa_id", nullable = false)
-    // private Pessoa pessoa; 
+    // private Pessoa pessoa;
 
     @ManyToOne
     @JoinColumn(name = "pena_id", nullable = false)
-    private Pena pena;
+    private UUID pena_id;
 
-    // QUAL DOS DOIS FICA, OU PRECISAMOS DOS DOIS CONSTRUTURES?
-    public Ocorrencia(UUID id, LocalDateTime dataRegistro, String descricao, TipoOcorrencia tipo,
-            Pessoa pessoa, Pena pena) {
-        this.id = id;
-        this.dataRegistro = dataRegistro;
-        this.descricao = descricao;
-        this.tipo = tipo;
-        this.pena = pena;
-        // this.pessoa = pessoa;
+    public Ocorrencia() {
     }
 
-    public Ocorrencia(UUID id, LocalDateTime dataRegistro, String descricao, TipoOcorrencia tipo, Pessoa usuario) {
+    // QUAL DOS DOIS FICA, OU PRECISAMOS DOS DOIS CONSTRUTURES?
+    public Ocorrencia(UUID id, LocalDateTime dataRegistro, String descricao, UUID tipo_id, UUID pena_id) {
+    // public Ocorrencia(UUID id, LocalDateTime dataRegistro, String descricao, TipoOcorrencia tipo,
+    //         Pessoa pessoa, Pena pena) {
         this.id = id;
         this.dataRegistro = dataRegistro;
         this.descricao = descricao;
-        this.tipo = tipo;
-        // this.pessoa = usuario;
+        this.tipo_id = tipo_id;
+        this.pena_id = pena_id;
+        // this.pessoa = pessoa;
     }
 
     public UUID getId() {
@@ -87,27 +83,27 @@ public class Ocorrencia {
         this.descricao = descricao;
     }
 
-    public TipoOcorrencia getTipo() {
-        return tipo;
+    public UUID getTipoId() {
+        return tipo_id;
     }
 
-    public void setTipo(TipoOcorrencia tipo) {
-        this.tipo = tipo;
+    public void setTipo(UUID tipo_id) {
+        this.tipo_id = tipo_id;
     }
 
-    public Pena getPena() {
-        return pena;
+    public UUID getPenaId() {
+        return pena_id;
     }
 
-    public void setPena(Pena pena) {
-        this.pena = pena;
+    public void setPenaId(UUID pena_ida) {
+        this.pena_id =pena_ida;
     }
-    
+
     // public Pessoa getPessoa() {
-    //     return pessoa;
+    // return pessoa;
     // }
 
     // public void setPessoa(Pessoa pessoa) {
-    //     this.pessoa = pessoa;
+    // this.pessoa = pessoa;
     // }
 }

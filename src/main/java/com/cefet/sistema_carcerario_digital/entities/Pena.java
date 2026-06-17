@@ -17,7 +17,8 @@ import jakarta.persistence.Table;
 @Table(name = "tb_pena")
 public class Pena {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     @Column(columnDefinition = "BINARY(16)", updatable = false, nullable = false)
     private UUID id;
 
@@ -37,17 +38,17 @@ public class Pena {
 
     @ManyToOne
     @JoinColumn(name = "pessoa_id", nullable = false)
-    private Pessoa pessoa;//o detento
+    private UUID pessoa_id;// o detento
 
     public Pena() {
     }
 
-    public Pena(UUID id, LocalDateTime dataSaida, StatusDetento situacao, LocalDateTime dataEntrada, Pessoa pessoa) {
+    public Pena(UUID id, LocalDateTime dataSaida, StatusDetento situacao, LocalDateTime dataEntrada, UUID pessoa_id) {
         this.id = id;
         this.dataEntrada = dataEntrada;
         this.dataSaida = dataSaida;
         this.situacao = situacao;
-        this.pessoa = pessoa;
+        this.pessoa_id = pessoa_id;
     }
 
     public UUID getId() {
@@ -64,10 +65,6 @@ public class Pena {
 
     public void setDataEntrada(LocalDateTime dataEntrada) {
         this.dataEntrada = dataEntrada;
-    }
-
-    public String getdescricao() {
-        return descricao;
     }
 
     public String getDescricao() {
@@ -94,12 +91,12 @@ public class Pena {
         this.situacao = situacao;
     }
 
-    public Pessoa getPessoa() {
-        return pessoa;
+    public UUID getPessoaId() {
+        return pessoa_id;
     }
 
-    public void setPessoa(Pessoa pessoa) {
-        this.pessoa = pessoa;
+    public void setPessoaId(UUID pessoa_id) {
+        this.pessoa_id = pessoa_id;
     }
 
 }

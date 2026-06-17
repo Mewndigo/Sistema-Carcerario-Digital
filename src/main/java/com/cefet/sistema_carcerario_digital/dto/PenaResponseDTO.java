@@ -17,7 +17,7 @@ public class PenaResponseDTO {
         this.descricao = entity.getDescricao();
         this.dataEntrada = entity.getDataEntrada();
         this.dataSaida = entity.getDataSaida();
-        this.pessoaId = entity.getPessoa().getId();
+        this.pessoaId = entity.getPessoaId();
         this.situacao = entity.getSituacao();
     }
 
