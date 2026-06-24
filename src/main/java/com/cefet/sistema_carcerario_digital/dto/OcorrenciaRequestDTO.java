@@ -1,27 +1,25 @@
 package com.cefet.sistema_carcerario_digital.dto;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
-
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class OcorrenciaRequestDTO extends BaseDTO {
 
-    @NotBlank(message = "O campo 'dataRegistro' é obrigatório.")
+    @NotNull(message = "O campo 'dataRegistro' é obrigatório.")
     private LocalDateTime dataRegistro;
 
     private String descricao;
 
-    @NotBlank(message = "O campo 'tipoId' é obrigatório.")
-    private UUID tipoId;
+    @NotNull(message = "O campo 'tipoId' é obrigatório.")
+    private Long tipoId;
 
-    @NotBlank(message = "O campo 'condenacaoId' é obrigatório.")
-    private UUID condenacaoId;
+    @NotNull(message = "O campo 'condenacaoId' é obrigatório.")
+    private Long condenacaoId;
 
     public OcorrenciaRequestDTO() {
     }
 
-    public OcorrenciaRequestDTO(UUID id, LocalDateTime dataRegistro, String descricao, UUID tipoId, UUID condenacaoId) {
+    public OcorrenciaRequestDTO(Long id, LocalDateTime dataRegistro, String descricao, Long tipoId, Long condenacaoId) {
         super(id);
         this.dataRegistro = dataRegistro;
         this.descricao = descricao;
@@ -45,19 +43,19 @@ public class OcorrenciaRequestDTO extends BaseDTO {
         this.descricao = descricao;
     }
 
-    public UUID getTipoId() {
+    public Long getTipoId() {
         return tipoId;
     }
 
-    public void setTipoId(UUID tipoId) {
+    public void setTipoId(Long tipoId) {
         this.tipoId = tipoId;
     }
 
-    public UUID getCondenacaoId() {
+    public Long getCondenacaoId() {
         return condenacaoId;
     }
 
-    public void setCondenacaoId(UUID condenacaoId) {
+    public void setCondenacaoId(Long condenacaoId) {
         this.condenacaoId = condenacaoId;
     }
 }

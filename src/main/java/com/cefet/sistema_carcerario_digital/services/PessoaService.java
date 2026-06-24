@@ -1,7 +1,6 @@
 package com.cefet.sistema_carcerario_digital.services;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -30,7 +29,7 @@ public class PessoaService {
     }
 
     @Transactional(readOnly = true)
-    public PessoaResponseDTO buscarPorId(UUID id) {
+    public PessoaResponseDTO buscarPorId(Long id) {
         Pessoa entity = repo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Pessoa não encontrado. Id: " + id));
 
@@ -54,7 +53,7 @@ public class PessoaService {
     }
 
     @Transactional
-    public PessoaResponseDTO alterar(UUID id, PessoaRequestDTO dto) {
+    public PessoaResponseDTO alterar(Long id, PessoaRequestDTO dto) {
         Pessoa entity = repo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Pessoa não encontrado. Id: " + id));
 
@@ -71,7 +70,7 @@ public class PessoaService {
     }
 
     @Transactional
-    public void excluir(UUID id) {
+    public void excluir(Long id) {
         if (!repo.existsById(id)) {
             throw new ResourceNotFoundException("Pessoa não encontrado. Id: " + id);
         }

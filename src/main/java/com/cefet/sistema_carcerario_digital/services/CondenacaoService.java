@@ -1,7 +1,6 @@
 package com.cefet.sistema_carcerario_digital.services;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -30,7 +29,7 @@ public class CondenacaoService {
     }
 
     @Transactional(readOnly = true)
-    public CondenacaoResponseDTO buscarPorId(UUID id) {
+    public CondenacaoResponseDTO buscarPorId(Long id) {
         Condenacao entity = repo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Condenacao nao encontrada. Id: " + id));
 
@@ -50,7 +49,7 @@ public class CondenacaoService {
         // ----
         if (repo.existsByDataEntrada(dto.getDataEntrada())
 
-                && repo.existsByPessoa(dto.getPessoaId())) {
+                && repo.existsByPessoaId(dto.getPessoaId())) {
             throw new DatabaseException("Condenacao ja cadastrada.");
         }
         // ----
@@ -64,7 +63,7 @@ public class CondenacaoService {
     }
 
     @Transactional
-    public CondenacaoResponseDTO alterar(UUID id, CondenacaoRequestDTO dto) {
+    public CondenacaoResponseDTO alterar(Long id, CondenacaoRequestDTO dto) {
         Condenacao entity = repo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Condenacao nao encontrada. Id: " + id));
 
@@ -77,7 +76,7 @@ public class CondenacaoService {
     }
 
     @Transactional
-    public void excluir(UUID id) {
+    public void excluir(Long id) {
         if (!repo.existsById(id)) {
             throw new ResourceNotFoundException("Condenacao nao encontrada. Id: " + id);
         }

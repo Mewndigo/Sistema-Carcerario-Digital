@@ -1,7 +1,6 @@
 package com.cefet.sistema_carcerario_digital.services;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -30,7 +29,7 @@ public class RegistroAtividadeService {
     }
 
     @Transactional(readOnly = true)
-    public RegistroAtividadeResponseDTO buscarPorId(UUID id) {
+    public RegistroAtividadeResponseDTO buscarPorId(Long id) {
         RegistroAtividade entity = repo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Registro de Atividade não encontrada"));
         return new RegistroAtividadeResponseDTO(entity);
@@ -38,7 +37,7 @@ public class RegistroAtividadeService {
 
     @Transactional
     public RegistroAtividadeResponseDTO inserir(RegistroAtividadeRequestDTO dto) {
-        if (repo.existsByTipo_IdAndDataRegistroAndPessoa_Id(
+        if (repo.existsByTipoIdAndDataRegistroAndPessoaId(
                 dto.getTipoId(),
                 dto.getDataRegistro(),
                 dto.getPessoaId())) {
@@ -51,13 +50,13 @@ public class RegistroAtividadeService {
     }
 
     @Transactional
-    public RegistroAtividadeResponseDTO alterar(UUID id, RegistroAtividadeRequestDTO dto) {
+    public RegistroAtividadeResponseDTO alterar(Long id, RegistroAtividadeRequestDTO dto) {
         RegistroAtividade entity = repo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Registro de Atividade não encontrado. Id: " + id));
 
         // se só podemos inserir uma atividade para cada pessoa por dia !
         // se não for o caso é só retirar essa verificação
-        if (repo.existsByTipo_IdAndDataRegistroAndPessoa_Id(
+        if (repo.existsByTipoIdAndDataRegistroAndPessoaId(
                 dto.getTipoId(),
                 dto.getDataRegistro(),
                 dto.getPessoaId())) {
@@ -72,7 +71,7 @@ public class RegistroAtividadeService {
     }
 
     @Transactional
-    public void excluir(UUID id) {
+    public void excluir(Long id) {
         if (!repo.existsById(id))
             throw new ResourceNotFoundException("Registro de Atividade não encontrado. . Id: " + id);
         repo.deleteById(id);

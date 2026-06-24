@@ -1,8 +1,6 @@
 package com.cefet.sistema_carcerario_digital.controllers;
 
 import java.util.List;
-import java.util.UUID;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -37,7 +35,7 @@ public class OcorrenciaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<OcorrenciaResponseDTO> buscar(@PathVariable UUID id) {
+    public ResponseEntity<OcorrenciaResponseDTO> buscar(@PathVariable Long id) {
         OcorrenciaResponseDTO dto = service.buscarPorId(id);
         return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
@@ -49,14 +47,14 @@ public class OcorrenciaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<OcorrenciaResponseDTO> alterar(@PathVariable UUID id,
+    public ResponseEntity<OcorrenciaResponseDTO> alterar(@PathVariable Long id,
             @Valid @RequestBody OcorrenciaRequestDTO dto) {
         OcorrenciaResponseDTO atualizado = service.alterar(id, dto);
         return ResponseEntity.status(HttpStatus.OK).body(atualizado);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> excluir(@PathVariable UUID id) {
+    public ResponseEntity<Void> excluir(@PathVariable Long id) {
         service.excluir(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

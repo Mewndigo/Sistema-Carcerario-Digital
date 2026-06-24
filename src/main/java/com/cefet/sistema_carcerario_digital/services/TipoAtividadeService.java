@@ -1,10 +1,13 @@
 package com.cefet.sistema_carcerario_digital.services;
 
 import java.util.List;
-import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.cefet.sistema_carcerario_digital.dto.TipoAtividadeRequestDTO;
+import com.cefet.sistema_carcerario_digital.dto.TipoAtividadeResponseDTO;
 import com.cefet.sistema_carcerario_digital.entities.TipoAtividade;
 import com.cefet.sistema_carcerario_digital.exceptions.ResourceNotFoundException;
 import com.cefet.sistema_carcerario_digital.repositories.TipoAtividadeRepository;
@@ -18,20 +21,45 @@ public class TipoAtividadeService {
         this.repo = repo;
     }
 
-    public List<TipoAtividade> findAll() { return repo.findAll(); }
-
-    public TipoAtividade findById(UUID id) { return repo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Tipo de Atividade não encontrada")); }
-
-    public TipoAtividade create(TipoAtividade t) { return repo.save(t); }
-
-    public TipoAtividade update(UUID id, TipoAtividade t) {
-        if (!repo.existsById(id)) throw new ResourceNotFoundException("Tipo de Atividade não encontrada");
-        t.setId(id);
-        return repo.save(t);
+    @Transactional(readOnly = true)
+    public List<TipoAtividadeResponseDTO> listar() {
+        List<TipoAtividade> lista = repo.findAll();
+        return lista.stream().map(TipoAtividadeResponseDTO::new).collect(Collectors.toList());
     }
 
-    public void delete(UUID id) {
-        if (!repo.existsById(id)) throw new ResourceNotFoundException("Tipo de Atividade não encontrada");
+    @Transactional(readOnly = true)
+    public TipoAtividadeResponseDTO buscarPorId(Long id) {
+        TipoAtividade entity = repo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Tipo de Atividade nao encontrada. Id: " + id));
+        return new TipoAtividadeResponseDTO(entity);
+    }
+
+    @Transactional
+    public TipoAtividadeResponseDTO inserir(TipoAtividadeRequestDTO dto) {
+        TipoAtividade entity = new TipoAtividade();
+        copiarDtoParaEntidade(dto, entity);
+        entity = repo.save(entity);
+        return new TipoAtividadeResponseDTO(entity);
+    }
+
+    @Transactional
+    public TipoAtividadeResponseDTO alterar(Long id, TipoAtividadeRequestDTO dto) {
+        TipoAtividade entity = repo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Tipo de Atividade nao encontrada. Id: " + id));
+        copiarDtoParaEntidade(dto, entity);
+        entity = repo.save(entity);
+        return new TipoAtividadeResponseDTO(entity);
+    }
+
+    @Transactional
+    public void excluir(Long id) {
+        if (!repo.existsById(id)) {
+            throw new ResourceNotFoundException("Tipo de Atividade nao encontrada. Id: " + id);
+        }
         repo.deleteById(id);
+    }
+
+    private void copiarDtoParaEntidade(TipoAtividadeRequestDTO dto, TipoAtividade entity) {
+        entity.setNome(dto.getNome());
     }
 }

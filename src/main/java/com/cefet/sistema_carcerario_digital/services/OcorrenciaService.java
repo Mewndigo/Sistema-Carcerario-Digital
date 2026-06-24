@@ -1,7 +1,6 @@
 package com.cefet.sistema_carcerario_digital.services;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -28,7 +27,7 @@ public class OcorrenciaService {
     }
 
     @Transactional(readOnly = true)
-    public OcorrenciaResponseDTO buscarPorId(UUID id) {
+    public OcorrenciaResponseDTO buscarPorId(Long id) {
         Ocorrencia entity = repo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Ocorrência não encontrada"));
         return new OcorrenciaResponseDTO(entity);
@@ -43,7 +42,7 @@ public class OcorrenciaService {
     }
 
     @Transactional
-    public OcorrenciaResponseDTO alterar(UUID id, OcorrenciaRequestDTO dto) {
+    public OcorrenciaResponseDTO alterar(Long id, OcorrenciaRequestDTO dto) {
         Ocorrencia entity = repo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Ocorrência não encontrada"));
         copiarDtoParaEntidade(dto, entity);
@@ -53,7 +52,7 @@ public class OcorrenciaService {
     }
 
     @Transactional
-    public void excluir(UUID id) {
+    public void excluir(Long id) {
         if (!repo.existsById(id)) {
             throw new ResourceNotFoundException("Ocorrência não encontrada");
         }

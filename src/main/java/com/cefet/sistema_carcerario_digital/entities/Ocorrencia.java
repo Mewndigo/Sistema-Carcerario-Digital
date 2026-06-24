@@ -1,23 +1,19 @@
 package com.cefet.sistema_carcerario_digital.entities;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "tb_ocorrencia")
 public class Ocorrencia {
     @Id
-    @GeneratedValue
-    @Column(columnDefinition = "BINARY(16)", updatable = false, nullable = false)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(nullable = false)
     private LocalDateTime dataRegistro;
@@ -25,30 +21,28 @@ public class Ocorrencia {
     @Column(nullable = false, length = 200)
     private String descricao;
 
-    @ManyToOne
-    @JoinColumn(name = "tipo_ocorrencia_id", nullable = false)
-    private UUID tipo_id;
+    @Column(name = "tipo_ocorrencia_id", nullable = false)
+    private Long tipoId;
 
-    @ManyToOne
-    @JoinColumn(name = "condenacao_id", nullable = false)
-    private UUID condenacao_id;
+    @Column(name = "condenacao_id", nullable = false)
+    private Long condenacaoId;
 
     public Ocorrencia() {
     }
 
-    public Ocorrencia(UUID id, LocalDateTime dataRegistro, String descricao, UUID tipo_id, UUID condenacao_id) {
+    public Ocorrencia(Long id, LocalDateTime dataRegistro, String descricao, Long tipo_id, Long condenacao_id) {
         this.id = id;
         this.dataRegistro = dataRegistro;
         this.descricao = descricao;
-        this.tipo_id = tipo_id;
-        this.condenacao_id = condenacao_id;
+        this.tipoId = tipo_id;
+        this.condenacaoId = condenacao_id;
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -68,19 +62,19 @@ public class Ocorrencia {
         this.descricao = descricao;
     }
 
-    public UUID getTipoId() {
-        return tipo_id;
+    public Long getTipoId() {
+        return tipoId;
     }
 
-    public void setTipo(UUID tipo_id) {
-        this.tipo_id = tipo_id;
+    public void setTipo(Long tipoId) {
+        this.tipoId = tipoId;
     }
 
-    public UUID getCondenacaoId() {
-        return condenacao_id;
+    public Long getCondenacaoId() {
+        return condenacaoId;
     }
 
-    public void setCondenacaoId(UUID condenacao_ida) {
-        this.condenacao_id =condenacao_ida;
+    public void setCondenacaoId(Long condenacaoId) {
+        this.condenacaoId = condenacaoId;
     }
 }

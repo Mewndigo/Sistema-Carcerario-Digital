@@ -1,7 +1,5 @@
 package com.cefet.sistema_carcerario_digital.dto;
 
-import java.util.UUID;
-
 import com.cefet.sistema_carcerario_digital.entities.TipoUsuario;
 
 import jakarta.validation.constraints.NotBlank;
@@ -20,7 +18,7 @@ public class PessoaRequestDTO extends BaseDTO {
     public PessoaRequestDTO() {
     }
 
-    public PessoaRequestDTO(UUID id, String nome, String cpf, String login, String senha, TipoUsuario tipo) {
+    public PessoaRequestDTO(Long id, String nome, String cpf, String login, String senha, TipoUsuario tipo) {
         super(id);
         this.nome = nome;
         this.cpf = cpf;

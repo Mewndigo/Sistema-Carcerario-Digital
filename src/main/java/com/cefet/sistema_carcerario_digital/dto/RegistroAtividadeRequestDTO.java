@@ -1,31 +1,29 @@
 package com.cefet.sistema_carcerario_digital.dto;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
-
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class RegistroAtividadeRequestDTO extends BaseDTO {
 
-    @NotBlank(message = "O campo 'dataRegistro' é obrigatório.")
+    @NotNull(message = "O campo 'dataRegistro' é obrigatório.")
     private LocalDateTime dataRegistro;
 
     private String descricao;
 
-    @NotBlank(message = "O campo 'tipoId' é obrigatório.")
-    private UUID tipoId;
+    @NotNull(message = "O campo 'tipoId' é obrigatório.")
+    private Long tipoId;
 
-    @NotBlank(message = "O campo 'condenacaoId' é obrigatório.")
-    private UUID condenacaoId;
+    @NotNull(message = "O campo 'condenacaoId' é obrigatório.")
+    private Long condenacaoId;
 
-    @NotBlank(message = "O campo 'pessoaId' é obrigatório.")
-    private UUID pessoaId;
+    @NotNull(message = "O campo 'pessoaId' é obrigatório.")
+    private Long pessoaId;
 
     public RegistroAtividadeRequestDTO() {
     }
 
-    public RegistroAtividadeRequestDTO(UUID id, LocalDateTime dataRegistro, String descricao, Boolean status,
-            UUID tipoId, UUID condenacaoId, UUID pessoaId) {
+    public RegistroAtividadeRequestDTO(Long id, LocalDateTime dataRegistro, String descricao, Boolean status,
+            Long tipoId, Long condenacaoId, Long pessoaId) {
         super(id);
         this.dataRegistro = dataRegistro;
         this.descricao = descricao;
@@ -50,27 +48,27 @@ public class RegistroAtividadeRequestDTO extends BaseDTO {
         this.descricao = descricao;
     }
 
-    public UUID getTipoId() {
+    public Long getTipoId() {
         return tipoId;
     }
 
-    public void setTipoId(UUID tipoId) {
+    public void setTipoId(Long tipoId) {
         this.tipoId = tipoId;
     }
 
-    public UUID getCondenacaoId() {
+    public Long getCondenacaoId() {
         return condenacaoId;
     }
 
-    public void setCondenacaoId(UUID condenacaoId) {
+    public void setCondenacaoId(Long condenacaoId) {
         this.condenacaoId = condenacaoId;
     }
 
-    public UUID getPessoaId() {
+    public Long getPessoaId() {
         return pessoaId;
     }
 
-    public void setPessoaId(UUID pessoaId) {
+    public void setPessoaId(Long pessoaId) {
         this.pessoaId = pessoaId;
     }
 }

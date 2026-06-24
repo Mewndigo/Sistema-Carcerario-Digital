@@ -1,11 +1,9 @@
 package com.cefet.sistema_carcerario_digital.dto;
 
-import java.util.UUID;
-
 import com.cefet.sistema_carcerario_digital.entities.Pessoa;
 
 public class PessoaResponseDTO {
-    private UUID id;
+    private Long id;
     private String nome;
     private String cpf;
 
@@ -19,7 +17,7 @@ public class PessoaResponseDTO {
         return cpf;
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
