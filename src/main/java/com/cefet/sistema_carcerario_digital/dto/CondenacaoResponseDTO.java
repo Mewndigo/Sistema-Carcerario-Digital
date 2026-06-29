@@ -3,7 +3,9 @@ package com.cefet.sistema_carcerario_digital.dto;
 import java.time.LocalDateTime;
 import com.cefet.sistema_carcerario_digital.entities.Condenacao;
 import com.cefet.sistema_carcerario_digital.entities.StatusDetento;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+@JsonPropertyOrder({ "descricao", "dataEntrada", "dataSaida", "situacao", "pessoaId" })
 public class CondenacaoResponseDTO {
 
     private String descricao;

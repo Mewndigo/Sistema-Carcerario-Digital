@@ -10,15 +10,24 @@ import com.cefet.sistema_carcerario_digital.dto.OcorrenciaRequestDTO;
 import com.cefet.sistema_carcerario_digital.dto.OcorrenciaResponseDTO;
 import com.cefet.sistema_carcerario_digital.entities.Ocorrencia;
 import com.cefet.sistema_carcerario_digital.exceptions.ResourceNotFoundException;
+import com.cefet.sistema_carcerario_digital.repositories.CondenacaoRepository;
 import com.cefet.sistema_carcerario_digital.repositories.OcorrenciaRepository;
+import com.cefet.sistema_carcerario_digital.repositories.TipoOcorrenciaRepository;
 
 @Service
 public class OcorrenciaService {
 
     private final OcorrenciaRepository repo;
+    private final CondenacaoRepository condenacaoRepo;
+    private final TipoOcorrenciaRepository tipoOcorrenciaRepo;
 
-    public OcorrenciaService(OcorrenciaRepository repo) {
+    public OcorrenciaService(
+            OcorrenciaRepository repo,
+            CondenacaoRepository condenacaoRepository,
+            TipoOcorrenciaRepository tipoOcorrenciaRepository) {
         this.repo = repo;
+        this.condenacaoRepo = condenacaoRepository;
+        this.tipoOcorrenciaRepo = tipoOcorrenciaRepository;
     }
 
     @Transactional(readOnly = true)
@@ -35,6 +44,8 @@ public class OcorrenciaService {
 
     @Transactional
     public OcorrenciaResponseDTO inserir(OcorrenciaRequestDTO dto) {
+        validar(dto);
+
         Ocorrencia entity = new Ocorrencia();
         copiarDtoParaEntidade(dto, entity);
         entity = repo.save(entity);
@@ -45,6 +56,8 @@ public class OcorrenciaService {
     public OcorrenciaResponseDTO alterar(Long id, OcorrenciaRequestDTO dto) {
         Ocorrencia entity = repo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Ocorrência não encontrada"));
+
+        validar(dto);
         copiarDtoParaEntidade(dto, entity);
         entity.setId(id);
         entity = repo.save(entity);
@@ -57,6 +70,16 @@ public class OcorrenciaService {
             throw new ResourceNotFoundException("Ocorrência não encontrada");
         }
         repo.deleteById(id);
+    }
+
+    private void validar(OcorrenciaRequestDTO dto) {
+        if (!condenacaoRepo.existsById(dto.getCondenacaoId())) {
+            throw new ResourceNotFoundException("Condenacao nao encontrada. Id: " + dto.getCondenacaoId());
+        }
+
+        if (!tipoOcorrenciaRepo.existsById(dto.getTipoId())) {
+            throw new ResourceNotFoundException("Tipo de Ocorrencia nao encontrada. Id: " + dto.getTipoId());
+        }
     }
 
     private void copiarDtoParaEntidade(OcorrenciaRequestDTO dto, Ocorrencia entity) {

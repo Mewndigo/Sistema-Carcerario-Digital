@@ -4,7 +4,7 @@ import com.cefet.sistema_carcerario_digital.entities.Pessoa;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonPropertyOrder({ "id", "nome", "cpf" })
-public class PessoaResponseDTO {
+public class PessoaResponseDTO { // atencao: estou pensando em expor somente o nome !
     private Long id;
     private String nome;
     private String cpf;

@@ -9,16 +9,22 @@ import org.springframework.transaction.annotation.Transactional;
 import com.cefet.sistema_carcerario_digital.dto.TipoOcorrenciaRequestDTO;
 import com.cefet.sistema_carcerario_digital.dto.TipoOcorrenciaResponseDTO;
 import com.cefet.sistema_carcerario_digital.entities.TipoOcorrencia;
+import com.cefet.sistema_carcerario_digital.exceptions.BusinessException;
 import com.cefet.sistema_carcerario_digital.exceptions.ResourceNotFoundException;
+import com.cefet.sistema_carcerario_digital.repositories.OcorrenciaRepository;
 import com.cefet.sistema_carcerario_digital.repositories.TipoOcorrenciaRepository;
 
 @Service
 public class TipoOcorrenciaService {
 
     private final TipoOcorrenciaRepository repo;
+    private final OcorrenciaRepository ocorrenciaRepo;
 
-    public TipoOcorrenciaService(TipoOcorrenciaRepository repo) {
+    public TipoOcorrenciaService(
+            TipoOcorrenciaRepository repo,
+            OcorrenciaRepository ocorrenciaRepository) {
         this.repo = repo;
+        this.ocorrenciaRepo = ocorrenciaRepository;
     }
 
     @Transactional(readOnly = true)
@@ -36,6 +42,10 @@ public class TipoOcorrenciaService {
 
     @Transactional
     public TipoOcorrenciaResponseDTO inserir(TipoOcorrenciaRequestDTO dto) {
+        if (repo.existsByNome(dto.getNome())) {
+            throw new BusinessException("Tipo de Ocorrencia já cadastrado.");
+        }
+
         TipoOcorrencia entity = new TipoOcorrencia();
         copiarDtoParaEntidade(dto, entity);
         entity = repo.save(entity);
@@ -46,6 +56,11 @@ public class TipoOcorrenciaService {
     public TipoOcorrenciaResponseDTO alterar(Long id, TipoOcorrenciaRequestDTO dto) {
         TipoOcorrencia entity = repo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Tipo de Ocorrencia nao encontrada. Id: " + id));
+
+        if (repo.existsByNomeAndIdNot(dto.getNome(), id)) {
+            throw new BusinessException("Tipo de Ocorrencia já cadastrado.");
+        }
+
         copiarDtoParaEntidade(dto, entity);
         entity = repo.save(entity);
         return new TipoOcorrenciaResponseDTO(entity);
@@ -56,6 +71,11 @@ public class TipoOcorrenciaService {
         if (!repo.existsById(id)) {
             throw new ResourceNotFoundException("Tipo de Ocorrencia nao encontrada. Id: " + id);
         }
+
+        if (ocorrenciaRepo.existsByTipoId(id)) {
+            throw new BusinessException("Não é possível excluir tipo de ocorrência com ocorrências vinculadas.");
+        }
+
         repo.deleteById(id);
     }
 

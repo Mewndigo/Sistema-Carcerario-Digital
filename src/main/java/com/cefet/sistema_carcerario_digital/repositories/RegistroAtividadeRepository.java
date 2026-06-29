@@ -11,4 +11,14 @@ public interface RegistroAtividadeRepository extends JpaRepository<RegistroAtivi
             Long tipoId,
             LocalDateTime dataRegistro,
             Long pessoaId);
+
+    boolean existsByTipoIdAndDataRegistroAndPessoaIdAndIdNot(
+            Long tipoId,
+            LocalDateTime dataRegistro,
+            Long pessoaId,
+            Long id);
+
+    boolean existsByCondenacaoId(Long condenacaoId);
+
+    boolean existsByTipoId(Long tipoId);
 }
