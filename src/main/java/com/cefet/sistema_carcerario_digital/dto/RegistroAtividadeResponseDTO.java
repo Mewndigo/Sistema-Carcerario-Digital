@@ -1,16 +1,16 @@
 package com.cefet.sistema_carcerario_digital.dto;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
-
 import com.cefet.sistema_carcerario_digital.entities.RegistroAtividade;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+@JsonPropertyOrder({ "dataRegistro", "descricao", "tipoId", "condenacaoId", "pessoaId" })
 public class RegistroAtividadeResponseDTO {
     private LocalDateTime dataRegistro;
     private String descricao;
-    private UUID tipoId;
-    private UUID condenacaoId;
-    private UUID pessoaId;
+    private Long tipoId;
+    private Long condenacaoId;
+    private Long pessoaId;
 
     public RegistroAtividadeResponseDTO(RegistroAtividade entity) {
         this.dataRegistro = entity.getDataRegistro();
@@ -27,15 +27,15 @@ public class RegistroAtividadeResponseDTO {
         return descricao;
     }
 
-    public UUID getCondenacaoId() {
+    public Long getCondenacaoId() {
         return condenacaoId;
     }
 
-    public UUID getPessoaId() {
+    public Long getPessoaId() {
         return pessoaId;
     }
 
-    public UUID getTipoId() {
+    public Long getTipoId() {
         return tipoId;
     }
 }

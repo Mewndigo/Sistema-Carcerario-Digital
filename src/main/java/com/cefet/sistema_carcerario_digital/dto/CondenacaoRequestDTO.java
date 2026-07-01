@@ -2,32 +2,30 @@ package com.cefet.sistema_carcerario_digital.dto;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.UUID;
-
 import com.cefet.sistema_carcerario_digital.entities.StatusDetento;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class CondenacaoRequestDTO extends BaseDTO {
 
     private String descricao;
 
-    @NotBlank(message = "O campo 'dataEntrada' e obrigatorio.")
+    @NotNull(message = "O campo 'dataEntrada' e obrigatorio.")
     private LocalDateTime dataEntrada;
 
-    @NotBlank(message = "O campo 'dataSaida' e obrigatorio.")
+    @NotNull(message = "O campo 'dataSaida' e obrigatorio.")
     private LocalDateTime dataSaida;
 
-    @NotBlank(message = "O campo 'dataEntrada' e obrigatorio.")
+    @NotNull(message = "O campo 'situacao' e obrigatorio.")
     private StatusDetento situacao;
 
-    @NotBlank(message = "O campo 'pessoaId' e obrigatorio.")
-    private UUID pessoaId;
+    @NotNull(message = "O campo 'pessoaId' e obrigatorio.")
+    private Long pessoaId;
 
     public CondenacaoRequestDTO() {
     }
 
-    public CondenacaoRequestDTO(UUID id, String nome, LocalDate dataNasc, StatusDetento status,
+    public CondenacaoRequestDTO(Long id, String nome, LocalDate dataNasc, StatusDetento status,
             LocalDateTime dataEntrada, String matricula, String bloco, Integer cela) {
         super(id);
         this.dataEntrada = dataEntrada;
@@ -65,11 +63,11 @@ public class CondenacaoRequestDTO extends BaseDTO {
         this.situacao = situacao;
     }
 
-    public UUID getPessoaId() {
+    public Long getPessoaId() {
         return pessoaId;
     }
 
-    public void setPessoaId(UUID pessoaId) {
+    public void setPessoaId(Long pessoaId) {
         this.pessoaId = pessoaId;
     }
 

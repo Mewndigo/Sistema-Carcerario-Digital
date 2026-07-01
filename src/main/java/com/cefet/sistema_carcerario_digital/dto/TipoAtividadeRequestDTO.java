@@ -1,7 +1,5 @@
 package com.cefet.sistema_carcerario_digital.dto;
 
-import java.util.UUID;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -14,7 +12,7 @@ public class TipoAtividadeRequestDTO extends BaseDTO {
     public TipoAtividadeRequestDTO() {
     }
 
-    public TipoAtividadeRequestDTO(UUID id, String nome, String observacoes) {
+    public TipoAtividadeRequestDTO(Long id, String nome, String observacoes) {
         super(id);
         this.nome = nome;
     }

@@ -1,8 +1,6 @@
 package com.cefet.sistema_carcerario_digital.controllers;
 
 import java.util.List;
-import java.util.UUID;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cefet.sistema_carcerario_digital.dto.TipoOcorrenciaRequestDTO;
 import com.cefet.sistema_carcerario_digital.dto.TipoOcorrenciaResponseDTO;
-import com.cefet.sistema_carcerario_digital.entities.TipoOcorrencia;
 import com.cefet.sistema_carcerario_digital.services.TipoOcorrenciaService;
 
 import jakarta.validation.Valid;
@@ -33,38 +30,32 @@ public class TipoOcorrenciaController {
 
     @GetMapping
     public ResponseEntity<List<TipoOcorrenciaResponseDTO>> listar() {
-        List<TipoOcorrenciaResponseDTO> lista = service.findAll().stream().map(TipoOcorrenciaResponseDTO::new).toList();
+        List<TipoOcorrenciaResponseDTO> lista = service.listar();
         return ResponseEntity.status(HttpStatus.OK).body(lista);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TipoOcorrenciaResponseDTO> buscar(@PathVariable UUID id) {
-        TipoOcorrencia entity = service.findById(id);
-        return ResponseEntity.status(HttpStatus.OK).body(new TipoOcorrenciaResponseDTO(entity));
+    public ResponseEntity<TipoOcorrenciaResponseDTO> buscar(@PathVariable Long id) {
+        TipoOcorrenciaResponseDTO dto = service.buscarPorId(id);
+        return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 
     @PostMapping
     public ResponseEntity<TipoOcorrenciaResponseDTO> inserir(@Valid @RequestBody TipoOcorrenciaRequestDTO dto) {
-        TipoOcorrencia entity = new TipoOcorrencia();
-        entity.setNome(dto.getNome());
-
-        TipoOcorrencia criado = service.create(entity);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new TipoOcorrenciaResponseDTO(criado));
+        TipoOcorrenciaResponseDTO criado = service.inserir(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(criado);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TipoOcorrenciaResponseDTO> alterar(@PathVariable UUID id,
+    public ResponseEntity<TipoOcorrenciaResponseDTO> alterar(@PathVariable Long id,
             @Valid @RequestBody TipoOcorrenciaRequestDTO dto) {
-        TipoOcorrencia entity = new TipoOcorrencia();
-        entity.setNome(dto.getNome());
-
-        TipoOcorrencia atualizado = service.update(id, entity);
-        return ResponseEntity.status(HttpStatus.OK).body(new TipoOcorrenciaResponseDTO(atualizado));
+        TipoOcorrenciaResponseDTO atualizado = service.alterar(id, dto);
+        return ResponseEntity.status(HttpStatus.OK).body(atualizado);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> excluir(@PathVariable UUID id) {
-        service.delete(id);
+    public ResponseEntity<Void> excluir(@PathVariable Long id) {
+        service.excluir(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

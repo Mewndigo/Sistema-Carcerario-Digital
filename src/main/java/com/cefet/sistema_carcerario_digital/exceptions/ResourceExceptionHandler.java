@@ -51,7 +51,7 @@ public class ResourceExceptionHandler {
             BusinessException e,
             HttpServletRequest request) {
 
-        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+        HttpStatus status = HttpStatus.BAD_REQUEST;
 
         StandardError err = new StandardError(
                 Instant.now(),

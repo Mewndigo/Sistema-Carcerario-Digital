@@ -1,11 +1,11 @@
 package com.cefet.sistema_carcerario_digital.dto;
 
-import java.util.UUID;
-
 import com.cefet.sistema_carcerario_digital.entities.Pessoa;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-public class PessoaResponseDTO {
-    private UUID id;
+@JsonPropertyOrder({ "id", "nome", "cpf" })
+public class PessoaResponseDTO { // atencao: estou pensando em expor somente o nome !
+    private Long id;
     private String nome;
     private String cpf;
 
@@ -19,7 +19,7 @@ public class PessoaResponseDTO {
         return cpf;
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 

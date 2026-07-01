@@ -1,37 +1,85 @@
 package com.cefet.sistema_carcerario_digital.services;
 
 import java.util.List;
-import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.cefet.sistema_carcerario_digital.dto.TipoOcorrenciaRequestDTO;
+import com.cefet.sistema_carcerario_digital.dto.TipoOcorrenciaResponseDTO;
 import com.cefet.sistema_carcerario_digital.entities.TipoOcorrencia;
+import com.cefet.sistema_carcerario_digital.exceptions.BusinessException;
 import com.cefet.sistema_carcerario_digital.exceptions.ResourceNotFoundException;
+import com.cefet.sistema_carcerario_digital.repositories.OcorrenciaRepository;
 import com.cefet.sistema_carcerario_digital.repositories.TipoOcorrenciaRepository;
 
 @Service
 public class TipoOcorrenciaService {
 
     private final TipoOcorrenciaRepository repo;
+    private final OcorrenciaRepository ocorrenciaRepo;
 
-    public TipoOcorrenciaService(TipoOcorrenciaRepository repo) {
+    public TipoOcorrenciaService(
+            TipoOcorrenciaRepository repo,
+            OcorrenciaRepository ocorrenciaRepository) {
         this.repo = repo;
+        this.ocorrenciaRepo = ocorrenciaRepository;
     }
 
-    public List<TipoOcorrencia> findAll() { return repo.findAll(); }
-
-    public TipoOcorrencia findById(UUID id) { return repo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Tipo de Ocorrência não encontrada")); }
-
-    public TipoOcorrencia create(TipoOcorrencia t) { return repo.save(t); }
-
-    public TipoOcorrencia update(UUID id, TipoOcorrencia t) {
-        if (!repo.existsById(id)) throw new ResourceNotFoundException("Tipo de Ocorrência não encontrada");
-        t.setId(id);
-        return repo.save(t);
+    @Transactional(readOnly = true)
+    public List<TipoOcorrenciaResponseDTO> listar() {
+        List<TipoOcorrencia> lista = repo.findAll();
+        return lista.stream().map(TipoOcorrenciaResponseDTO::new).collect(Collectors.toList());
     }
 
-    public void delete(UUID id) {
-        if (!repo.existsById(id)) throw new ResourceNotFoundException("Tipo de Ocorrência não encontrada");
+    @Transactional(readOnly = true)
+    public TipoOcorrenciaResponseDTO buscarPorId(Long id) {
+        TipoOcorrencia entity = repo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Tipo de Ocorrencia nao encontrada. Id: " + id));
+        return new TipoOcorrenciaResponseDTO(entity);
+    }
+
+    @Transactional
+    public TipoOcorrenciaResponseDTO inserir(TipoOcorrenciaRequestDTO dto) {
+        if (repo.existsByNome(dto.getNome())) {
+            throw new BusinessException("Tipo de Ocorrencia já cadastrado.");
+        }
+
+        TipoOcorrencia entity = new TipoOcorrencia();
+        copiarDtoParaEntidade(dto, entity);
+        entity = repo.save(entity);
+        return new TipoOcorrenciaResponseDTO(entity);
+    }
+
+    @Transactional
+    public TipoOcorrenciaResponseDTO alterar(Long id, TipoOcorrenciaRequestDTO dto) {
+        TipoOcorrencia entity = repo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Tipo de Ocorrencia nao encontrada. Id: " + id));
+
+        if (repo.existsByNomeAndIdNot(dto.getNome(), id)) {
+            throw new BusinessException("Tipo de Ocorrencia já cadastrado.");
+        }
+
+        copiarDtoParaEntidade(dto, entity);
+        entity = repo.save(entity);
+        return new TipoOcorrenciaResponseDTO(entity);
+    }
+
+    @Transactional
+    public void excluir(Long id) {
+        if (!repo.existsById(id)) {
+            throw new ResourceNotFoundException("Tipo de Ocorrencia nao encontrada. Id: " + id);
+        }
+
+        if (ocorrenciaRepo.existsByTipoId(id)) {
+            throw new BusinessException("Não é possível excluir tipo de ocorrência com ocorrências vinculadas.");
+        }
+
         repo.deleteById(id);
+    }
+
+    private void copiarDtoParaEntidade(TipoOcorrenciaRequestDTO dto, TipoOcorrencia entity) {
+        entity.setNome(dto.getNome());
     }
 }
